@@ -1,0 +1,8 @@
+node_modules
+.next
+.git
+**/.git
+**/target
+services/*/calculadora
+.env*
+*.tsbuildinfo

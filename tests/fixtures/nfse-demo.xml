@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Fixture sintética para testar renderização. Sem validade fiscal ou assinatura. -->
+<NFSe xmlns="http://www.sped.fazenda.gov.br/nfse" versao="1.01">
+  <infNFSe Id="NFS35503080000000000000000000000000000000000000000000000">
+    <nNFSe>1</nNFSe><dhProc>2026-11-24T12:00:00-03:00</dhProc><ambGer>2</ambGer><cStat>100</cStat>
+    <xLocEmi>São Paulo</xLocEmi><cLocIncid>3550308</cLocIncid><xLocPrestacao>São Paulo</xLocPrestacao><xTribNac>Serviço de demonstração</xTribNac>
+    <emit><CNPJ>00000000000000</CNPJ><xNome>EMITENTE FICTÍCIO - SEM VALIDADE FISCAL</xNome><enderNac><xLgr>Rua de Teste</xLgr><nro>0</nro><xBairro>Centro</xBairro><cMun>3550308</cMun><UF>SP</UF><CEP>00000000</CEP></enderNac></emit>
+    <valores><vLiq>1000.00</vLiq><vBC>1000.00</vBC><vISSQN>0.00</vISSQN><pAliqAplic>0.00</pAliqAplic></valores>
+    <DPS><infDPS Id="DPSDEMONSTRACAO"><tpAmb>2</tpAmb><dhEmi>2026-11-24T12:00:00-03:00</dhEmi><serie>1</serie><nDPS>1</nDPS><dCompet>2026-11-24</dCompet><tpEmit>1</tpEmit><cLocEmi>3550308</cLocEmi>
+      <prest><CNPJ>00000000000000</CNPJ></prest>
+      <toma><CNPJ>00000000000000</CNPJ><xNome>TOMADOR FICTÍCIO</xNome></toma>
+      <serv><locPrest><cLocPrestacao>3550308</cLocPrestacao></locPrest><cServ><cTribNac>010101</cTribNac><xDescServ>TESTE DE RENDERIZAÇÃO - SEM VALIDADE FISCAL</xDescServ></cServ></serv>
+      <valores><vServPrest><vServ>1000.00</vServ></vServPrest><trib><tribMun><tribISSQN>1</tribISSQN><tpRetISSQN>1</tpRetISSQN></tribMun></trib></valores>
+    </infDPS></DPS>
+  </infNFSe>
+</NFSe>

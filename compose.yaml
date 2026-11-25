@@ -1,0 +1,93 @@
+name: reforma-simulator
+services:
+  database:
+    build:
+      context: .
+      dockerfile: docker/java.Dockerfile
+      target: database
+      args:
+        SERVICE: regime-regular
+    volumes:
+      - tax-database:/database
+    restart: 'no'
+  regular:
+    build:
+      context: .
+      dockerfile: docker/java.Dockerfile
+      args:
+        SERVICE: regime-regular
+    depends_on:
+      database:
+        condition: service_completed_successfully
+    volumes:
+      - tax-database:/app/calculadora/db:ro
+    ports:
+      - '127.0.0.1:8080:8080'
+    environment:
+      SPRING_PROFILES_ACTIVE: offline
+      JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=75
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -fsS http://localhost:9101/health || exit 1']
+      interval: 15s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+    restart: unless-stopped
+  simples:
+    build:
+      context: .
+      dockerfile: docker/java.Dockerfile
+      args:
+        SERVICE: simples-nacional
+    depends_on:
+      database:
+        condition: service_completed_successfully
+    volumes:
+      - tax-database:/app/calculadora/db:ro
+    ports:
+      - '127.0.0.1:8082:8082'
+    environment:
+      SPRING_PROFILES_ACTIVE: offline
+      JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=75
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -fsS http://localhost:9103/health || exit 1']
+      interval: 15s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+    restart: unless-stopped
+  danfse:
+    build:
+      context: .
+      dockerfile: docker/danfse.Dockerfile
+    ports:
+      - '127.0.0.1:8083:8080'
+    healthcheck:
+      test: ['CMD', 'wget', '-q', '--spider', 'http://localhost:8080/health/ready']
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+  web:
+    build: .
+    ports:
+      - '127.0.0.1:3000:3000'
+    environment:
+      REGULAR_API_URL: http://regular:8080
+      SIMPLES_API_URL: http://simples:8082
+      DANFSE_API_URL: http://danfse:8080
+    depends_on:
+      regular:
+        condition: service_healthy
+      simples:
+        condition: service_healthy
+      danfse:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD', 'node', '-e', "fetch('http://127.0.0.1:3000').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+volumes:
+  tax-database:
